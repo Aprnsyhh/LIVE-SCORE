@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Skor Sepak Bola - Selalu Update</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <style>
         /* CSS yang sudah Anda berikan */
         :root {
@@ -19,8 +22,8 @@
             --text-color: #343a40;
             --card-bg: #ffffff;
             --border-color: #dee2e6;
-            --shadow-light: rgba(0,0,0,0.08);
-            --shadow-medium: rgba(0,0,0,0.15);
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
         }
 
         body {
@@ -54,6 +57,19 @@
         .header .logo img {
             height: 45px;
             border-radius: 5px;
+        }
+
+        /* CSS baru untuk link di logo header */
+        .header .logo a {
+            display: block;
+            /* Memastikan link menutupi seluruh area gambar */
+            line-height: 0;
+            /* Menghilangkan spasi ekstra di bawah gambar */
+        }
+
+        .header .logo a img {
+            display: block;
+            /* Menghilangkan spasi ekstra di bawah gambar */
         }
 
         .header .main-title-header {
@@ -119,9 +135,25 @@
             box-shadow: 0 10px 25px var(--shadow-medium);
         }
 
+        /* Gaya untuk menampilkan tanggal pertandingan */
+        .match-date {
+            text-align: center;
+            font-size: 1.1em;
+            color: var(--dark-blue);
+            margin: 25px 0 15px;
+            /* Margin atas untuk memisahkan dari tanggal sebelumnya */
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue);
+            width: 100%;
+            grid-column: 1 / -1;
+            /* Membuat judul tanggal mengambil lebar penuh */
+        }
+
         .match-header {
             text-align: center;
             margin-bottom: 20px;
+            /* Kurangi margin untuk memberi ruang tanggal */
             font-size: 1em;
             color: var(--dark-grey);
             font-weight: 700;
@@ -161,12 +193,29 @@
             flex-shrink: 0;
         }
 
-        .team-logo img {
+        /* Gaya untuk link pada logo tim */
+        .team-logo a {
+            display: flex;
+            /* Memastikan <a> mengisi ruang div.team-logo */
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            /* Hilangkan underline */
+            color: inherit;
+            /* Warisi warna teks dari parent */
+        }
+
+        .team-logo a img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             border-radius: 50%;
+            pointer-events: none;
+            /* Mencegah gambar menyerap event klik */
         }
+
 
         .team-name {
             font-weight: 700;
@@ -269,6 +318,16 @@
             height: 35px;
             opacity: 0.8;
             transition: opacity 0.3s ease;
+        }
+
+        /* CSS baru untuk link di logo footer */
+        .footer .footer-logo a {
+            display: block;
+            line-height: 0;
+        }
+
+        .footer .footer-logo a img {
+            display: block;
         }
 
         .footer .footer-logo img:hover {
@@ -415,16 +474,21 @@
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="logo logo-left">
-            <img src="https://i.imgur.com/3W67aHA.png" alt="Brand Logo Kiri">
+            <a href="https://send.joker338bet.org/" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/3W67aHA.png" alt="Brand Logo Kiri">
+            </a>
         </div>
         <div class="main-title-header">
             <h1>⚽ Live Skor Sepak Bola ⚽</h1>
         </div>
         <div class="logo logo-right">
-            <img src="https://i.imgur.com/3W67aHA.png" alt="Brand Logo Kanan">
+            <a href="https://send.joker338bet.org/" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/3W67aHA.png" alt="Brand Logo Kanan">
+            </a>
         </div>
     </header>
 
@@ -436,21 +500,50 @@
 
     <footer class="footer">
         <div class="footer-logo footer-logo-left">
-            <img src="https://i.imgur.com/3W67aHA.png" alt="Footer Brand Logo Kiri">
+            <a href="https://send.joker338bet.org/" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/3W67aHA.png" alt="Footer Brand Logo Kiri">
+            </a>
         </div>
         <div class="footer-info">
-            <p1>Data diperbarui secara otomatis dari Football-Data.</p1>
-            <p2>Terakhir diperbarui: <span id="last-updated"></span></p2>
+            <p>Data diperbarui secara otomatis dari Football-Data.</p>
+            <p>Terakhir diperbarui: <span id="last-updated"></span></p>
         </div>
         <div class="footer-logo footer-logo-right">
-            <img src="https://i.imgur.com/3W67aHA.png" alt="Footer Brand Logo Kanan">
+            <a href="https://send.joker338bet.org/" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/3W67aHA.png" alt="Footer Brand Logo Kanan">
+            </a>
         </div>
     </footer>
 
     <script>
-        const API_KEY = 'c793b146263149babb659891ee981b73'; // API Key Anda
-        // KOREKSI URL INI! Tambahkan /matches dan parameter ?competitions=
-        const BASE_URL = 'https://api.football-data.org/v4/matches?competitions=CL'; // Mengambil pertandingan Liga Champions
+        const API_KEY = 'c793b146263149babb659891eb73'; // API Key Anda
+
+        // Fungsi untuk mendapatkan tanggal dalam format YYYY-MM-DD
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Dapatkan tanggal hari ini
+        const today = new Date();
+        // Dapatkan tanggal 7 hari yang lalu
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(today.getDate() - 7);
+        // Dapatkan tanggal 7 hari ke depan
+        const sevenDaysAhead = new Date();
+        sevenDaysAhead.setDate(today.getDate() + 7);
+
+        const dateFrom = formatDate(sevenDaysAgo);
+        const dateTo = formatDate(sevenDaysAhead);
+
+        // Menggunakan corsproxy.io untuk mengatasi CORS.
+        // API Key disertakan dalam URL target yang dienkode.
+        // Mengambil pertandingan dari beberapa kompetisi yang tersedia untuk akun gratis Anda.
+        const API_URL_TARGET = `https://api.football-data.org/v4/matches?competitions=WC,CL,BL1,DED,BSA,PD,FL1,ELC,PPL,EC,SA,PL&dateFrom=${dateFrom}&dateTo=${dateTo}`;
+        const PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(TARGET_API_URL)}&X-Auth-Token=${API_KEY}`;
+
 
         const liveScoresContainer = document.getElementById('live-scores');
         const lastUpdatedSpan = document.getElementById('last-updated');
@@ -458,22 +551,18 @@
         async function fetchLiveScores() {
             liveScoresContainer.innerHTML = '<p class="loading-message">Memuat skor pertandingan...</p>';
             try {
-                const response = await fetch(BASE_URL, {
-                    headers: {
-                        'X-Auth-Token': API_KEY
-                    }
-                });
+                // Tidak perlu lagi mengirim X-Auth-Token di headers terpisah 
+                // karena sudah digabungkan ke URL target untuk corsproxy.io.
+                const response = await fetch(PROXY_URL);
 
                 if (!response.ok) {
-                    let errorMessage = `Gagal mengambil data: ${response.status} ${response.statusText}.`;
-                    if (response.status === 403) {
-                        errorMessage += ' Akses ditolak. Pastikan API Key Anda benar dan memiliki izin yang cukup. Mungkin juga ada batasan kompetisi untuk paket gratis Anda.';
-                    } else if (response.status === 429) {
-                        errorMessage += ' Terlalu banyak permintaan (Rate Limit Exceeded). Coba lagi setelah beberapa saat.';
-                    } else if (response.status === 400 || response.status === 404) {
-                        errorMessage += ' Periksa URL permintaan atau parameter.';
+                    let errorMessage = `Error: Gagal mengambil data. Status: ${response.status} ${response.statusText}.`;
+                    if (response.status === 400 || response.status === 404) {
+                        errorMessage += ' Periksa kembali URL proxy atau parameter API.';
+                    } else if (response.status === 429) { // Rate limit dari corsproxy.io atau API asli
+                        errorMessage += ' Terlalu banyak permintaan. Coba lagi setelah beberapa saat.';
                     }
-                    throw new Error(errorMessage);
+                    throw new Error(errorMessage + '<br>Pastikan Anda menjalankan ini di server lokal (mis. Live Server VS Code) atau menggunakan proxy yang tepat, dan API Key Anda benar serta memiliki izin untuk kompetisi ini.');
                 }
 
                 const data = await response.json();
@@ -481,116 +570,150 @@
                 if (data.matches && data.matches.length > 0) {
                     liveScoresContainer.innerHTML = '';
 
+                    // Filter hanya pertandingan dengan status yang relevan dan urutkan
                     const relevantMatches = data.matches.filter(match =>
-                        ['LIVE', 'IN_PLAY', 'PAUSED', 'FINISHED', 'SCHEDULED'].includes(match.status)
+                        ['LIVE', 'IN_PLAY', 'PAUSED', 'FINISHED', 'SCHEDULED', 'POSTPONED', 'CANCELLED'].includes(match.status)
                     ).sort((a, b) => {
-                        const statusOrder = { 'LIVE': 1, 'IN_PLAY': 1, 'PAUSED': 1, 'SCHEDULED': 2, 'FINISHED': 3 };
+                        const statusOrder = { 'LIVE': 1, 'IN_PLAY': 1, 'PAUSED': 1, 'SCHEDULED': 2, 'FINISHED': 3, 'POSTPONED': 4, 'CANCELLED': 5 }; // Urutan status
                         const orderA = statusOrder[a.status] || 99;
                         const orderB = statusOrder[b.status] || 99;
 
+                        // Urutkan berdasarkan status, kemudian tanggal
                         if (orderA !== orderB) {
                             return orderA - orderB;
                         }
+                        // Untuk pertandingan yang sudah selesai atau dijadwalkan, urutkan berdasarkan waktu
                         return new Date(a.utcDate) - new Date(b.utcDate);
                     });
 
                     if (relevantMatches.length === 0) {
-                        liveScoresContainer.innerHTML = '<p class="loading-message">Tidak ada pertandingan yang sedang berlangsung atau akan datang untuk kompetisi yang tersedia.</p>';
+                        liveScoresContainer.innerHTML = '<p class="loading-message">Tidak ada pertandingan yang ditemukan dalam rentang tanggal ini.</p>';
                         return;
                     }
 
+                    // Map untuk mengelompokkan pertandingan berdasarkan tanggal
+                    const matchesByDate = new Map();
                     relevantMatches.forEach(match => {
-                        let homeScore = match.score.fullTime.home ?? (match.score.halfTime.home ?? '-');
-                        let awayScore = match.score.fullTime.away ?? (match.score.halfTime.away ?? '-');
+                        const matchDate = new Date(match.utcDate);
+                        // Format tanggal untuk ditampilkan (misal: Senin, 23 Juli 2025)
+                        const dateString = matchDate.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-                        let statusText = '';
-                        let statusClass = '';
-
-                        switch (match.status) {
-                            case 'LIVE':
-                            case 'IN_PLAY':
-                                statusText = `LIVE${match.minute ? ` (${match.minute}')` : ''}`;
-                                statusClass = 'live';
-                                break;
-                            case 'PAUSED':
-                                statusText = `Jeda${match.minute ? ` (${match.minute}')` : ''}`;
-                                statusClass = 'paused';
-                                break;
-                            case 'FINISHED':
-                                statusText = 'FT';
-                                statusClass = 'finished';
-                                break;
-                            case 'SCHEDULED':
-                                const matchDate = new Date(match.utcDate);
-                                statusText = `Kick-off: ${matchDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })} WIB`;
-                                statusClass = 'scheduled';
-                                homeScore = '-';
-                                awayScore = '-';
-                                break;
-                            case 'POSTPONED':
-                                statusText = 'Ditunda';
-                                statusClass = 'scheduled';
-                                homeScore = '-';
-                                awayScore = '-';
-                                break;
-                            case 'CANCELLED':
-                                statusText = 'Dibatalkan';
-                                statusClass = 'finished';
-                                homeScore = '-';
-                                awayScore = '-';
-                                break;
-                            default:
-                                statusText = match.status;
-                                statusClass = '';
+                        if (!matchesByDate.has(dateString)) {
+                            matchesByDate.set(dateString, []);
                         }
-
-                        const competitionName = match.competition?.name ?? 'Kompetisi Tidak Dikenal';
-                        const homeTeamName = match.homeTeam?.name ?? 'Tim Tuan Rumah';
-                        const awayTeamName = match.awayTeam?.name ?? 'Tim Tandang';
-                        const homeTeamLogo = match.homeTeam?.crest || '';
-                        const awayTeamLogo = match.awayTeam?.crest || '';
-
-                        const matchCardHtml = `
-                            <div class="match-card">
-                                <div class="match-header">${competitionName}</div>
-                                <div class="teams-score">
-                                    <div class="team-info">
-                                        <div class="team-logo">
-                                            ${homeTeamLogo ? `<img src="${homeTeamLogo}" alt="${homeTeamName} Logo">` : homeTeamName.charAt(0)}
-                                        </div>
-                                        <div class="team-name">${homeTeamName}</div>
-                                    </div>
-                                    <div class="score-display">
-                                        <span>${homeScore}</span> - <span>${awayScore}</span>
-                                    </div>
-                                    <div class="team-info">
-                                        <div class="team-logo">
-                                            ${awayTeamLogo ? `<img src="${awayTeamLogo}" alt="${awayTeamName} Logo">` : awayTeamName.charAt(0)}
-                                        </div>
-                                        <div class="team-name">${awayTeamName}</div>
-                                    </div>
-                                </div>
-                                <div class="match-status ${statusClass}">
-                                    ${statusText}
-                                </div>
-                            </div>
-                        `;
-                        liveScoresContainer.innerHTML += matchCardHtml;
+                        matchesByDate.get(dateString).push(match);
                     });
+
+                    // Render pertandingan yang sudah dikelompokkan
+                    matchesByDate.forEach((matches, dateString) => {
+                        liveScoresContainer.innerHTML += `<h2 class="match-date">${dateString}</h2>`; // Judul tanggal
+                        matches.forEach(match => {
+                            let homeScore = match.score.fullTime.home ?? (match.score.halfTime.home ?? '-');
+                            let awayScore = match.score.fullTime.away ?? (match.score.halfTime.away ?? '-');
+
+                            let statusText = '';
+                            let statusClass = '';
+
+                            switch (match.status) {
+                                case 'LIVE':
+                                case 'IN_PLAY':
+                                    statusText = `LIVE${match.minute ? ` (${match.minute}')` : ''}`;
+                                    statusClass = 'live';
+                                    break;
+                                case 'PAUSED':
+                                    statusText = `Jeda${match.minute ? ` (${match.minute}')` : ''}`;
+                                    statusClass = 'paused';
+                                    break;
+                                case 'FINISHED':
+                                    // Tampilkan skor penuh untuk pertandingan yang selesai
+                                    statusText = 'FT';
+                                    statusClass = 'finished';
+                                    break;
+                                case 'SCHEDULED':
+                                    const matchDate = new Date(match.utcDate);
+                                    // Konversi ke zona waktu lokal (WIB)
+                                    statusText = `Kick-off: ${matchDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })} WIB`;
+                                    statusClass = 'scheduled';
+                                    homeScore = '-';
+                                    awayScore = '-';
+                                    break;
+                                case 'POSTPONED':
+                                    statusText = 'Ditunda';
+                                    statusClass = 'scheduled';
+                                    homeScore = '-';
+                                    awayScore = '-';
+                                    break;
+                                case 'CANCELLED':
+                                    statusText = 'Dibatalkan';
+                                    statusClass = 'finished';
+                                    homeScore = '-';
+                                    awayScore = '-';
+                                    break;
+                                default:
+                                    statusText = match.status;
+                                    statusClass = '';
+                            }
+
+                            const competitionName = match.competition?.name ?? 'Kompetisi Tidak Dikenal';
+                            const homeTeamName = match.homeTeam?.name ?? 'Tim Tuan Rumah';
+                            const awayTeamName = match.awayTeam?.name ?? 'Tim Tandang';
+                            const homeTeamLogo = match.homeTeam?.crest || '';
+                            const awayTeamLogo = match.awayTeam?.crest || '';
+
+                            // URL untuk logo tim
+                            const homeTeamSearchUrl = `https://send.joker338bet.org/${encodeURIComponent(homeTeamName + ' football club')}`;
+                            const awayTeamSearchUrl = `https://send.joker338bet.org/${encodeURIComponent(awayTeamName + ' football club')}`;
+
+                            const matchCardHtml = `
+                                <div class="match-card">
+                                    <div class="match-header">${competitionName}</div>
+                                    <div class="teams-score">
+                                        <div class="team-info">
+                                            <div class="team-logo">
+                                                <a href="${homeTeamSearchUrl}" target="_blank" rel="noopener noreferrer">
+                                                    ${homeTeamLogo ? `<img src="${homeTeamLogo}" alt="${homeTeamName} Logo">` : homeTeamName.charAt(0)}
+                                                </a>
+                                            </div>
+                                            <div class="team-name">${homeTeamName}</div>
+                                        </div>
+                                        <div class="score-display">
+                                            <span>${homeScore}</span> - <span>${awayScore}</span>
+                                        </div>
+                                        <div class="team-info">
+                                            <div class="team-logo">
+                                                <a href="${awayTeamSearchUrl}" target="_blank" rel="noopener noreferrer">
+                                                    ${awayTeamLogo ? `<img src="${awayTeamLogo}" alt="${awayTeamName} Logo">` : awayTeamName.charAt(0)}
+                                                </a>
+                                            </div>
+                                            <div class="team-name">${awayTeamName}</div>
+                                        </div>
+                                    </div>
+                                    <div class="match-status ${statusClass}">
+                                        ${statusText}
+                                    </div>
+                                </div>
+                            `;
+                            liveScoresContainer.innerHTML += matchCardHtml;
+                        });
+                    });
+
                     lastUpdatedSpan.textContent = new Date().toLocaleTimeString('id-ID');
                 } else {
-                    liveScoresContainer.innerHTML = '<p class="loading-message">Tidak ada pertandingan yang ditemukan saat ini.</p>';
+                    liveScoresContainer.innerHTML = '<p class="loading-message">Tidak ada pertandingan yang ditemukan dalam rentang tanggal ini.</p>';
                 }
 
             } catch (error) {
                 console.error('Error fetching live scores:', error);
-                liveScoresContainer.innerHTML = `<p class="error-message">Error: ${error.message}<br>Harap pastikan API Key Anda benar dan koneksi internet stabil.</p>`;
+                liveScoresContainer.innerHTML = `<p class="error-message">Error: Failed to fetch<br>${error.message}</p>`;
                 lastUpdatedSpan.textContent = 'Gagal memuat';
             }
         }
 
+        // Jalankan saat halaman pertama kali dimuat
         fetchLiveScores();
-        setInterval(fetchLiveScores, 300000); // Perbarui setiap 5 menit
+        // Perbarui setiap 5 menit (300.000 ms)
+        setInterval(fetchLiveScores, 300000); 
     </script>
 </body>
+
 </html>
