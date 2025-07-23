@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Skor Sepak Bola - Selalu Update</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Styling --- */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0; /* Remove default body padding */
+            color: #333;
+            display: flex;
+            flex-direction: column; /* Stack header, container, and footer */
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* --- Header Styling --- */
+        .header {
+            background-color: #fff;
+            width: 100%;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        .logo-left img, .logo-right img {
+            height: 40px; /* Adjust logo size as needed */
+        }
+        .logo-left, .logo-right {
+            flex: 0 0 auto; /* Prevent logo sections from growing */
+        }
+        .main-title-header {
+            flex: 1;
+            text-align: center;
+        }
+        .main-title-header h1 {
+            color: #0056b3;
+            margin-bottom: 10px; /* Adjust spacing */
+            font-size: 1.8em; /* Adjust font size */
+            position: relative;
+            padding-bottom: 5px;
+        }
+        .main-title-header h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 60px; /* Adjust width */
+            height: 2px; /* Adjust height */
+            background-color: #007bff;
+            border-radius: 2px;
+        }
+
+        .container {
+            max-width: 850px;
+            width: 100%;
+            margin: 20px auto; /* Add top and bottom margin */
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden; /* Clear floats */
+            box-sizing: border-box;
+        }
+
+        .match-list {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Responsive grid */
+        }
+        .match-card {
+            background-color: #fefefe;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .match-header {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+        }
+        .teams-score {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        .team-info {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .team-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            border-radius: 50%; /* If logos are circular */
+            background-color: #eee; /* Placeholder background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+        .team-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        .team-name {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #333;
+            text-transform: capitalize;
+        }
+        .score-display {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #d9534f;
+            margin: 0 15px;
+            min-width: 80px; /* Ensure consistent width */
+            text-align: center;
+        }
+        .match-status {
+            text-align: center;
+            font-size: 1em;
+            color: #5cb85c; /* Green for live */
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .match-status.finished {
+            color: #888; /* Grey for finished */
+        }
+        .match-status.scheduled {
+            color: #f0ad4e; /* Orange for scheduled */
+        }
+        .loading-message, .error-message {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            padding: 30px;
+        }
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        /* --- Footer Styling --- */
+        .footer {
+            background-color: #f8f9fa;
+            width: 100%;
+            padding: 15px 20px;
+            margin-top: 20px;
+            color: #888;
+            text-align: center;
+            font-size: 0.85em;
+            border-top: 1px solid #eee;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-logo-left img, .footer-logo-right img {
+            height: 30px; /* Adjust footer logo size as needed */
+        }
+        .footer-logo-left, .footer-logo-right {
+            flex: 0 0 auto;
+        }
+        .footer-info {
+            flex: 1;
+            text-align: center;
+            margin-top: 0; /* Override previous margin-top */
+        }
+
+        /* --- Responsive adjustments --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .match-card {
+                padding: 15px;
+            }
+            .team-logo {
+                width: 50px;
+                height: 50px;
+            }
+            .team-name {
+                font-size: 1.1em;
+            }
+            .score-display {
+                font-size: 2em;
+            }
+            .header {
+                padding: 10px 15px;
+            }
+            .logo-left img, .logo-right img {
+                height: 30px;
+            }
+            .main-title-header h1 {
+                font-size: 1.6em;
+                margin-bottom: 5px;
+            }
+            .main-title-header h1::after {
+                width: 50px;
+                height: 1.5px;
+            }
+            .footer {
+                padding: 10px 15px;
+            }
+            .footer-logo-left img, .footer-logo-right img {
+                height: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0; /* Adjust body padding for small screens */
+            }
+            .container {
+                margin: 10px auto;
+                padding: 10px;
+            }
+            .match-list {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+            .teams-score {
+                flex-direction: row; /* Keep horizontal layout for teams */
+            }
+            .team-info {
+                margin-bottom: 0;
+            }
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+            .logo-left, .logo-right {
+                margin-bottom: 5px;
+            }
+            .main-title-header {
+                margin: 10px 0;
+            }
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+            .footer-logo-left, .footer-logo-right {
+                margin-bottom: 5px;
+            }
+            .footer-info {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-left">
+            <img src="https://adminyole.online/assets/Logo.png" alt="Brand Logo Kiri">
+        </div>
+        <div class="main-title-header">
+            <h1>⚽ Live Skor Sepak Bola ⚽</h1>
+        </div>
+        <div class="logo-right">
+            <img src="https://adminyole.online/assets/Logo.png" alt="Brand Logo Kanan">
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="live-scores" class="match-list">
+            <p class="loading-message">Memuat skor...</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-logo-left">
+            <img src="https://adminyole.online/assets/Logo.png" alt="Footer Brand Logo Kiri">
+        </div>
+        <p class="footer-info">
+            Data diperbarui secara otomatis dari Live Score: <span id="last-updated"></span>
+        </p>
+        <div class="footer-logo-right">
+            <img src="https://adminyole.online/assets/Logo.png" alt="Footer Brand Logo Kanan">
+        </div>
+    </footer>
+
+    <script>
+        // --- JavaScript Logic ---
+
+        // PENTING: GANTI DENGAN KUNCI API ANDA!
+        // Anda perlu mendaftar ke Football-Data.org (atau API lainnya) untuk mendapatkan API key gratis.
+        // Buka: https://www.football-data.org/client/register
+        const API_KEY = 'c793b146263149babb659891ee981b73'; // <--- GANTI INI!
+        const BASE_URL = 'https://api.football-data.org/v4/matches';
+
+        const liveScoresContainer = document.getElementById('live-scores');
+        const lastUpdatedSpan = document.getElementById('last-updated');
+
+        async function fetchLiveScores() {
+            liveScoresContainer.innerHTML = '<p class="loading-message">Memuat skor...</p>'; // Tampilkan pesan loading
+            try {
+                const response = await fetch(BASE_URL, {
+                    headers: {
+                        'X-Auth-Token': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        throw new Error('Akses ditolak. Pastikan API Key Anda benar dan memiliki izin yang cukup. Mungkin juga ada batasan rate limit.');
+                    } else if (response.status === 429) {
+                        throw new Error('Terlalu banyak permintaan (Rate Limit Exceeded). Coba lagi nanti.');
+                    } else {
+                        throw new Error(`Gagal mengambil data: ${response.status} ${response.statusText}`);
+                    }
+                }
+
+                const data = await response.json();
+
+                if (data.matches && data.matches.length > 0) {
+                    liveScoresContainer.innerHTML = ''; // Hapus pesan loading
+
+                    // Filter pertandingan yang sedang berlangsung, terjadwal, atau selesai baru-baru ini
+                    // dan urutkan agar yang LIVE di atas
+                    const relevantMatches = data.matches.filter(match =>
+                        match.status === 'LIVE' ||
+                        match.status === 'IN_PLAY' ||
+                        match.status === 'PAUSED' ||
+                        match.status === 'FINISHED' ||
+                        match.status === 'SCHEDULED'
+                    ).sort((a, b) => {
+                        // Prioritaskan pertandingan LIVE/IN_PLAY di atas
+                        if ((a.status === 'LIVE' || a.status === 'IN_PLAY' || a.status === 'PAUSED') && (b.status !== 'LIVE' && b.status !== 'IN_PLAY' && b.status !== 'PAUSED')) {
+                            return -1;
+                        }
+                        if ((b.status === 'LIVE' || b.status === 'IN_PLAY' || b.status === 'PAUSED') && (a.status !== 'LIVE' && a.status !== 'IN_PLAY' && a.status !== 'PAUSED')) {
+                            return 1;
+                        }
+                        // Kemudian urutkan berdasarkan waktu (yang lebih dekat akan di atas)
+                        return new Date(a.utcDate) - new Date(b.utcDate);
+                    });
+
+                    if (relevantMatches.length === 0) {
+                        liveScoresContainer.innerHTML = '<p class="loading-message">Saat ini tidak ada pertandingan yang sedang berlangsung atau akan datang.</p>';
+                        return;
+                    }
+
+
+                    relevantMatches.forEach(match => {
+                        let homeScore = match.score.fullTime.home !== null ? match.score.fullTime.home :
+                                        (match.score.halfTime.home !== null ? match.score.halfTime.home : '-');
+                        let awayScore = match.score.fullTime.away !== null ? match.score.fullTime.away :
+                                        (match.score.halfTime.away !== null ? match.score.halfTime.away : '-');
+
+                        let statusText = '';
+                        let statusClass = '';
+
+                        switch (match.status) {
+                            case 'LIVE':
+                            case 'IN_PLAY':
+                                statusText = `LIVE (${match.minute ? match.minute + "'" : ''})`;
+                                statusClass = 'live';
+                                break;
+                            case 'PAUSED':
+                                statusText = `Jeda (${match.minute ? match.minute + "'" : ''})`;
+                                statusClass = 'live'; // Masih dianggap "live" untuk styling
+                                break;
+                            case 'FINISHED':
+                                statusText = 'FT'; // Full Time
+                                statusClass = 'finished';
+                                break;
+                            case 'SCHEDULED':
+                                const matchDate = new Date(match.utcDate);
+                                statusText = `Kick-off: ${matchDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`;
+                                statusClass = 'scheduled';
+                                homeScore = '-';
+                                awayScore = '-';
+                                break;
+                            case 'POSTPONED':
+                                statusText = 'Ditunda';
+                                statusClass = 'scheduled';
+                                homeScore = '-';
+                                awayScore = '-';
+                                break;
+                            case 'CANCELLED':
+                                statusText = 'Dibatalkan';
+                                statusClass = 'finished';
+                                homeScore = '-';
+                                awayScore = '-';
+                                break;
+                            default:
+                                statusText = match.status;
+                                statusClass = '';
+                        }
+
+                        // Menggunakan operator OR (||) untuk memberikan nilai default jika properti tidak ada
+                        const competitionName = match.competition?.name || 'Kompetisi Tidak Dikenal';
+                        const homeTeamName = match.homeTeam?.name || 'Tim Tuan Rumah';
+                        const awayTeamName = match.awayTeam?.name || 'Tim Tandang';
+
+                        const matchCardHtml = `
+                            <div class="match-card">
+                                <div class="match-header">${competitionName}</div>
+                                <div class="teams-score">
+                                    <div class="team-info">
+                                        <div class="team-logo">${homeTeamName.charAt(0)}</div>
+                                        <div class="team-name">${homeTeamName}</div>
+                                    </div>
+                                    <div class="score-display">
+                                        <span>${homeScore}</span> - <span>${awayScore}</span>
+                                    </div>
+                                    <div class="team-info">
+                                        <div class="team-logo">${awayTeamName.charAt(0)}</div>
+                                        <div class="team-name">${awayTeamName}</div>
+                                    </div>
+                                </div>
+                                <div class="match-status ${statusClass}">
+                                    ${statusText}
+                                </div>
+                            </div>
+                        `;
+                        liveScoresContainer.innerHTML += matchCardHtml;
+                    });
+                    lastUpdatedSpan.textContent = new Date().toLocaleTimeString('id-ID'); // Update waktu terakhir diperbarui
+                } else {
+                    liveScoresContainer.innerHTML = '<p class="loading-message">Tidak ada pertandingan yang ditemukan saat ini.</p>';
+                }
+
+            } catch (error) {
+                console.error('Error fetching live scores:', error);
+                liveScoresContainer.innerHTML = `<p class="error-message">Error: ${error.message}<br>Pastikan API Key Anda benar dan koneksi internet stabil.</p>`;
+                lastUpdatedSpan.textContent = 'Gagal memuat';
+            }
+        }
+
+        // Panggil fungsi saat halaman pertama kali dimuat
+        fetchLiveScores();
+
+        // Perbarui skor setiap 30 detik
+        setInterval(fetchLiveScores, 30000); // 30000 milidetik = 30 detik
+    </script>
+</body>
+</html>
